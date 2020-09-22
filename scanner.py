@@ -66,7 +66,7 @@ def mv_downloaded_scan(destination_fp) -> None:
     """
     # create destination dir if required
     dest_folder = Path("/".join(destination_fp.split('/')[:-1]))
-    if dest_folder.is_dir():
+    if ".pdf" not in dest_folder.as_posix():
         dest_folder.mkdir(parents=True, exist_ok=True)
 
     # move downloaded file
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # create the scanned document
-    #scan_and_save()
+    scan_and_save()
 
     # move to the desired folder
     mv_downloaded_scan(args.destination_fp)
