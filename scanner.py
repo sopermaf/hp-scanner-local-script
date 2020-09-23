@@ -1,6 +1,8 @@
 """
 Interact with HP Web Interface and perform
 scan
+
+Only expected Documents to be PDF
 """
 import json
 import os
@@ -12,8 +14,8 @@ from typing import Union
 from selenium import webdriver
 
 
-DOWNLOADS_FOLDER = os.path.expanduser('~') + "/Downloads"
-DOWNLOADED_FILE = f"{DOWNLOADS_FOLDER}/NextDocument.pdf"
+HOME_DIR = os.path.expanduser('~')
+DOWNLOADED_FILE = f"{HOME_DIR}/Downloads/NextDocument.pdf"
 
 
 def scan_and_save(printer_ip: str="192.168.0.178") -> None:
@@ -58,19 +60,20 @@ def scan_and_save(printer_ip: str="192.168.0.178") -> None:
     driver.close()
 
 
-def mv_downloaded_scan(destination_fp) -> None:
+def mv_downloaded_scan(destination_fp: str) -> None:
     """
-    Moves the scanned pdf to a new location
+    Moves the scanned pdf to a new location relative to the `HOME_DIR`
+    """
+    # define absolute path of destination
+    abs_path = f'{HOME_DIR}/{destination_fp}'
 
-    Relative to the current directory
-    """
-    # create destination dir if required
-    dest_folder = Path("/".join(destination_fp.split('/')[:-1]))
+    # create destination folders if required
+    dest_folder = Path("/".join(abs_path.split('/')[:-1]))
     if ".pdf" not in dest_folder.as_posix():
         dest_folder.mkdir(parents=True, exist_ok=True)
 
-    # move downloaded file
-    Path(DOWNLOADED_FILE).replace(destination_fp)
+    # move downloaded file to destination
+    Path(DOWNLOADED_FILE).replace(abs_path)
 
 
 if __name__ == "__main__":
@@ -82,6 +85,7 @@ if __name__ == "__main__":
 
     # create the scanned document
     scan_and_save()
+    sleep(2)
 
     # move to the desired folder
     mv_downloaded_scan(args.destination_fp)
