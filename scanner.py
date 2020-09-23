@@ -9,7 +9,6 @@ import os
 from argparse import ArgumentParser
 from pathlib import Path
 from time import sleep
-from typing import Union
 
 from selenium import webdriver
 
@@ -84,7 +83,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # create the scanned document
-    scan_and_save()
+    printer_ip = os.environ['PRINTER_IP']
+    print(f'Printer IP: {printer_ip}')
+    scan_and_save(printer_ip)
     sleep(2)
 
     # move to the desired folder
