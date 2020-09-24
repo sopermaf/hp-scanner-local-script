@@ -45,6 +45,10 @@ def scan_and_save(printer_ip: str) -> None:
     profile = {'printing.print_preview_sticky_settings.appState': json.dumps(appState)}
     options = webdriver.ChromeOptions()
     options.add_experimental_option('prefs', profile)
+    options.add_argument("--disable-extensions")    # disabling extensions
+    options.add_argument("--disable-gpu")           # applicable to windows os only
+    options.add_argument("--disable-dev-shm-usage") # overcome limited resource problems
+    options.add_argument("--no-sandbox")
     options.add_argument('--kiosk-printing')
 
     driver = webdriver.Chrome(options=options)
