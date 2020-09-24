@@ -17,7 +17,16 @@ HOME_DIR = os.path.expanduser('~')
 DOWNLOADED_FILE = f"{HOME_DIR}/Downloads/NextDocument.pdf"
 
 
-def scan_and_save(printer_ip: str="192.168.0.178") -> None:
+def automate_scan_process(printer_ip: str, filepath: str) -> None:
+    """Scan document and save at `filename`"""
+    scan_and_save(printer_ip)
+
+    sleep(2)
+
+    mv_downloaded_scan(filepath)
+
+
+def scan_and_save(printer_ip: str) -> None:
     """
     Saves as PDF in ~/Downloads/NextDocument.pdf
     """
