@@ -1,5 +1,7 @@
 import os
 import tkinter as tk
+from tkinter import ttk
+
 from functools import partial
 
 from . import scanner
@@ -24,6 +26,13 @@ class ScannerGUI(tk.Frame):
         self.t_file = None
 
     def create_widgets(self, folder_temps, file_temps):
+        # printer config options
+        self.feed = tk.StringVar()
+        self.feed_select = ttk.Combobox(textvariable=self.feed, width=12)
+        self.feed_select['values'] = ('GLASS', 'ADF')
+        self.feed_select.current(0)
+        self.feed_select.pack(expand=1)
+
         # show templates
         self.setup_template_listbox('folders', folder_temps)
         self.setup_template_listbox('files', file_temps)
@@ -76,7 +85,8 @@ class ScannerGUI(tk.Frame):
         self.status_text.set(f'Attempting scan: {save_filepath}')
         scanner.automate_scan_process(
             printer_ip=os.environ['PRINTER_IP'],
-            filepath=save_filepath
+            filepath=save_filepath,
+            feed=self.feed.get()
         )
         self.status_text.set(f'Scanned successfully.\nSaved as {save_filepath}')
 

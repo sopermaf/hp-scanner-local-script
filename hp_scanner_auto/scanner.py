@@ -77,11 +77,11 @@ def scan_and_save(printer_ip: str, feed_mode: FeedModes=FeedModes.GLASS) -> None
 
     # switch focus to new tab
     driver.switch_to.window(driver.window_handles[1])
-    sleep(20)
+    sleep(30)
     driver.execute_script('window.print();')
 
     sleep(2)
-    driver.close()
+    driver.quit()
 
 
 def mv_downloaded_scan(destination_fp: str) -> None:
