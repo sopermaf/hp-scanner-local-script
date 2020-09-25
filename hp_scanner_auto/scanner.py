@@ -22,9 +22,10 @@ HOME_DIR = os.path.expanduser('~')
 DOWNLOADED_FILE = f"{HOME_DIR}/Downloads/NextDocument.pdf"
 
 
-def automate_scan_process(printer_ip: str, filepath: str) -> None:
+def automate_scan_process(printer_ip: str, filepath: str, feed: str) -> None:
     """Scan document and save at `filename`"""
-    scan_and_save(printer_ip)
+    feed = FeedModes[feed.upper()]
+    scan_and_save(printer_ip, feed)
 
     sleep(2)
 
