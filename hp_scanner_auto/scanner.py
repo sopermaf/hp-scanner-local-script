@@ -88,52 +88,11 @@ def mv_downloaded_scan(destination_fp: str) -> None:
     Path(DOWNLOADED_FILE).replace(abs_path)
 
 
-def setup_destination() -> str:
-    """Prompt user to setup a destination to move file"""
-    # existing choice?
-    try:
-        with open('folders.json') as fp:
-            prev_folders = json.load(fp)
-    except FileNotFoundError:
-        prev_folders = []
-        choice = None
-    else:
-        print("###Previous paths below###")
-        print(*enumerate(prev_folders), sep='\n')
-        print(f'\nSelect index digit of choice(0-{len(prev_folders)})')
-        choice = input('Enter digit or press enter to skip: ')
-
-    # try to use existing choice if possible
-    try:
-        folder = prev_folders[int(choice)]
-    except (ValueError, TypeError):
-        print("\nCONFIGURING NEW PATH")
-        folder = input('\tSet up new folder path from home: ')
-        
-        # add new folder to the list of previous folders
-        prev_folders.append(folder)
-        prev_folders.sort()
-
-        with open('folders.json', 'w+') as fp:
-            json.dump(prev_folders, fp, indent=4, sort_keys=True)
-
-    # get name of the file
-    filename = input('New pdf name: ')
-    if not filename.endswith('.pdf'):
-        filename += '.pdf'
-    
-    return f'{folder}/{filename}'
-
-
 if __name__ == "__main__":
     # setup argument parser
     parser = ArgumentParser()
-    parser.add_argument('destination_fp', nargs='?', help="relative path to new file")
-
+    parser.add_argument('destination_fp', help="relative path to new file")
     args = parser.parse_args()
-
-    if not args.destination_fp:
-        args.destination_fp = setup_destination()
 
     # create the scanned document
     printer_ip = os.environ['PRINTER_IP']
