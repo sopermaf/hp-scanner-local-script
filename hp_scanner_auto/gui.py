@@ -1,5 +1,6 @@
 import os
 import tkinter as tk
+from functools import partial
 
 from . import scanner
 from .templates import folders, files
@@ -16,6 +17,9 @@ class ScannerGUI(tk.Frame):
             folder_temps or [],
             file_temps or [],
         )
+
+        self.folder_temps = folder_temps
+        self.file_temps = file_temps
         self.t_folder = None
         self.t_file = None
 
@@ -26,17 +30,31 @@ class ScannerGUI(tk.Frame):
 
         # show chosen option
         self.filepath_str = tk.StringVar(self, value='')
-        self.filepath_label = tk.Entry(self, textvariable=self.filepath_str, width=100)
+        self.filepath_label = tk.Entry(self, textvariable=self.filepath_str, width=100, bg="yellow")
         self.filepath_label.pack()
 
         # activate button
         self.scan = tk.Button(self, text="Start Scan", command=self.scan_document)
-        self.scan.pack()
+        self.scan.pack(side="left")
+
+        self.add_folders = tk.Button(
+            self,
+            text="Add Folder Template",
+            command=partial(self.extend_template, "folder"),
+        )
+        self.add_folders.pack(side="right")
+
+        self.add_files = tk.Button(
+            self,
+            text="Add File Template",
+            command=partial(self.extend_template, "file"),
+        )
+        self.add_files.pack(side="right")
 
         # show status
         self.status_text = tk.StringVar(self, value='')
         self.status = tk.Label(self, textvariable=self.status_text)
-        self.status.pack()
+        self.status.pack(side="bottom")
 
 
     def scan_document(self):
@@ -62,11 +80,18 @@ class ScannerGUI(tk.Frame):
         )
         self.status_text.set(f'Scanned successfully.\nSaved as {save_filepath}')
 
-    def extend_template(self, choice, val):
-        if choice not in {'folder', 'file'}:
+    def extend_template(self, temp_type):
+        if temp_type not in {'folder', 'file'}:
             raise ValueError('Invalid template type')
 
-        self.__dict__[choice].append(val)
+        widget = self.__dict__[f'{temp_type}s']
+        temps = self.__dict__[f'{temp_type}_temps']
+
+        # add new val to widget and templates
+        val = self.filepath_str.get()
+        temps.append(val)
+        widget.insert(tk.END, val)
+
 
     def on_select(self, evt):
         new_t_folder = self._get_selected(self.folders)
