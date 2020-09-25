@@ -19,15 +19,12 @@ class TemplateManager:
                 self._values = json.load(fp)
         except FileNotFoundError:
             self._values = []
-            # create file for future use
-            with open(self.config_file, 'w+') as config_file:
-                config_file.write('[]')
 
     def append(self, val):
         self._values.append(val)
 
         with open(self.config_file, 'w+') as fp:
-            json.dump(sorted(self._values), fp)
+            json.dump(sorted(self._values), fp, indent=4)
 
     def __iter__(self):
         return iter(self._values)
