@@ -1,3 +1,6 @@
 .venv/
 
 .env
+
+hp-scanner-folders.json
+hp-scanner-files.json
