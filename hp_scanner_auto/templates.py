@@ -13,19 +13,20 @@ _FILES_TEMPLATES = os.path.join(_BASE, 'hp-scanner-files.json')
 class TemplateManager:
     """Manage Folder and File Template Options"""
     def __init__(self, filepath):
+        self.config_file = filepath
         try:
-            with open(filepath) as fp:
+            with open(self.config_file) as fp:
                 self._values = json.load(fp)
         except FileNotFoundError:
             self._values = []
             # create file for future use
-            with open(filepath, 'w+') as config_file:
+            with open(self.config_file, 'w+') as config_file:
                 config_file.write('[]')
 
     def append(self, val):
         self._values.append(val)
 
-        with open(self.values, 'w+') as fp:
+        with open(self.config_file, 'w+') as fp:
             json.dump(sorted(self._values), fp)
 
     def __iter__(self):
